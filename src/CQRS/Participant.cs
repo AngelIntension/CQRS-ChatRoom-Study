@@ -22,7 +22,7 @@ namespace CQRS
 
         public void Leave(IChatRoom chatRoom)
         {
-            chatRoom.Remove(this);
+            commandMediator.Send(new LeaveChatRoom.Command(this, chatRoom));
         }
 
         public void SendMessageTo(IChatRoom chatRoom, string message)

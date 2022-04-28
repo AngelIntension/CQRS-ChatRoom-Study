@@ -14,6 +14,7 @@ namespace CQRS.Tests
         {
             mediator = new CommandMediator();
             mediator.Register(new JoinChatRoom.Handler());
+            mediator.Register(new LeaveChatRoom.Handler());
         }
 
         public class Join : ParticipantTest
