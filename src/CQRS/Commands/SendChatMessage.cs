@@ -20,7 +20,12 @@ namespace CQRS.Commands
         {
             public void Handle(Command command)
             {
-                command.ChatRoom.Add(command.Message);
+                var chatRoom = command.ChatRoom;
+                chatRoom.Add(command.Message);
+                foreach (var participant in chatRoom.ListParticipants())
+                {
+                    participant.NewMessageReceivedFrom(chatRoom, command.Message);
+                }
             }
         }
     }

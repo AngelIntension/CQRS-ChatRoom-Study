@@ -1,6 +1,7 @@
 ﻿using CQRS.Abstractions;
 using CQRS.Commands;
 using Moq;
+using System.Collections.Generic;
 using Xunit;
 
 namespace CQRS.Tests.CommandHandlerTests
@@ -66,6 +67,38 @@ namespace CQRS.Tests.CommandHandlerTests
 
                 // assert
                 chatRoomMock.Verify(c => c.Add(message), Times.Once());
+            }
+
+            [Fact]
+            public void ShouldSendSpecifiedMessageToAllParticipantsInSpecifiedChatRoom()
+            {
+                // arrange
+                var senderMock = new Mock<IParticipant>();
+
+                var participant1Mock = new Mock<IParticipant>();
+                var participant2Mock = new Mock<IParticipant>();
+                var participants = new List<IParticipant>()
+                {
+                    participant1Mock.Object,
+                    participant2Mock.Object,
+                    senderMock.Object
+                };
+
+                var chatRoomMock = new Mock<IChatRoom>();
+                chatRoomMock.Setup(c => c.ListParticipants()).Returns(participants);
+
+                var message = new ChatMessage(senderMock.Object, "test message");
+                var command = new SendChatMessage.Command(chatRoomMock.Object, message);
+
+                var sut = new SendChatMessage.Handler();
+
+                // act
+                sut.Handle(command);
+
+                // assert
+                participant1Mock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message));
+                participant2Mock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message));
+                senderMock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message));
             }
         }
     }
