@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CQRS
 {
-    public class JoinCommandMediator
+    public class JoinCommandMediator : IJoinCommandMediator
     {
         private readonly List<IJoinHandler> handlers = new List<IJoinHandler>();
 
