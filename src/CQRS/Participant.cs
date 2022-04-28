@@ -8,30 +8,28 @@ namespace CQRS
     public class Participant : IParticipant
     {
         private readonly IMessageWriter messageWriter;
-        private readonly ICommandMediator commandMediator;
-        private readonly IQueryMediator queryMediator;
+        private readonly IMediator mediator;
 
-        public Participant(ICommandMediator commandMediator, IQueryMediator queryMediator, IMessageWriter messageWriter)
+        public Participant(IMediator mediator, IMessageWriter messageWriter)
         {
             this.messageWriter = messageWriter;
-            this.commandMediator = commandMediator;
-            this.queryMediator = queryMediator;
+            this.mediator = mediator;
         }
 
         public void Join(IChatRoom chatRoom)
         {
-            commandMediator.Send(new JoinChatRoom.Command(this, chatRoom));
+            mediator.Send(new JoinChatRoom.Command(this, chatRoom));
         }
 
         public void Leave(IChatRoom chatRoom)
         {
-            commandMediator.Send(new LeaveChatRoom.Command(this, chatRoom));
+            mediator.Send(new LeaveChatRoom.Command(this, chatRoom));
         }
 
         public void SendMessageTo(IChatRoom chatRoom, string message)
         {
             var chatMessage = new ChatMessage(this, message);
-            commandMediator.Send(new SendChatMessage.Command(chatRoom, chatMessage));
+            mediator.Send(new SendChatMessage.Command(chatRoom, chatMessage));
         }
 
         public void NewMessageReceivedFrom(IChatRoom chatRoom, ChatMessage message)
@@ -41,12 +39,12 @@ namespace CQRS
 
         public IEnumerable<IParticipant> ListParticipantsOf(IChatRoom chatRoom)
         {
-            return queryMediator.Send<ListParticipants.Query, IEnumerable<IParticipant>>(new ListParticipants.Query(chatRoom));
+            return mediator.Send<ListParticipants.Query, IEnumerable<IParticipant>>(new ListParticipants.Query(chatRoom));
         }
 
         public IEnumerable<ChatMessage> ListMessagesOf(IChatRoom chatRoom)
         {
-            return queryMediator.Send<ListMessages.Query, IEnumerable<ChatMessage>>(new ListMessages.Query(chatRoom));
+            return mediator.Send<ListMessages.Query, IEnumerable<ChatMessage>>(new ListMessages.Query(chatRoom));
         }
     }
 }
