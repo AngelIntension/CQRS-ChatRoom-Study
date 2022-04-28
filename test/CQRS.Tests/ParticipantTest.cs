@@ -1,4 +1,5 @@
 ﻿using CQRS.Abstractions;
+using CQRS.Commands;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
@@ -7,6 +8,14 @@ namespace CQRS.Tests
 {
     public class ParticipantTest
     {
+        private readonly IJoinCommandMediator mediator;
+
+        public ParticipantTest()
+        {
+            mediator = new JoinCommandMediator();
+            mediator.Register(new JoinChatRoom.Handler());
+        }
+
         public class Join : ParticipantTest
         {
             [Fact]
@@ -16,7 +25,7 @@ namespace CQRS.Tests
                 var chatRoomMock = new Mock<IChatRoom>();
                 var writerMock = new Mock<IMessageWriter>();
 
-                var sut = new Participant(writerMock.Object);
+                var sut = new Participant(mediator, writerMock.Object);
 
                 // act
                 sut.Join(chatRoomMock.Object);
@@ -35,7 +44,7 @@ namespace CQRS.Tests
                 var chatRoomMock = new Mock<IChatRoom>();
                 var writerMock = new Mock<IMessageWriter>();
 
-                var sut = new Participant(writerMock.Object);
+                var sut = new Participant(mediator, writerMock.Object);
 
                 // act
                 sut.Leave(chatRoomMock.Object);
@@ -53,7 +62,7 @@ namespace CQRS.Tests
                 // arrange
                 var writerMock = new Mock<IMessageWriter>();
 
-                var sut = new Participant(writerMock.Object);
+                var sut = new Participant(mediator, writerMock.Object);
 
                 var chatRoomMock = new Mock<IChatRoom>();
                 chatRoomMock.Setup(c => c.Add(It.IsAny<ChatMessage>()))
@@ -83,7 +92,7 @@ namespace CQRS.Tests
 
                 var message = new ChatMessage(senderMock.Object, "test Message");
 
-                var sut = new Participant(messageWriter: writerMock.Object);
+                var sut = new Participant(mediator, messageWriter: writerMock.Object);
 
                 // act
                 sut.NewMessageReceivedFrom(chatRoom: chatRoomMock.Object, message: message);
@@ -102,14 +111,14 @@ namespace CQRS.Tests
                 var writerMock = new Mock<IMessageWriter>();
                 var data = new List<Participant>()
                 {
-                    new Participant(writerMock.Object),
-                    new Participant(writerMock.Object),
-                    new Participant(writerMock.Object)
+                    new Participant(mediator, writerMock.Object),
+                    new Participant(mediator, writerMock.Object),
+                    new Participant(mediator, writerMock.Object)
                 };
                 var chatRoomMock = new Mock<IChatRoom>();
                 chatRoomMock.Setup(c => c.ListParticipants()).Returns(data);
 
-                var sut = new Participant(writerMock.Object);
+                var sut = new Participant(mediator, writerMock.Object);
 
                 // act
                 IEnumerable<IParticipant> participants = sut.ListParticipantsOf(chatRoom: chatRoomMock.Object);
@@ -126,7 +135,7 @@ namespace CQRS.Tests
             {
                 // arrange
                 var writerMock = new Mock<IMessageWriter>();
-                var sut = new Participant(writerMock.Object);
+                var sut = new Participant(mediator, writerMock.Object);
 
                 var data = new List<ChatMessage>()
                 {

@@ -1,4 +1,5 @@
 ﻿using CQRS.Abstractions;
+using CQRS.Commands;
 using System.Collections.Generic;
 
 namespace CQRS
@@ -6,15 +7,17 @@ namespace CQRS
     public class Participant : IParticipant
     {
         private IMessageWriter messageWriter;
+        private IJoinCommandMediator mediator;
 
-        public Participant(IMessageWriter messageWriter)
+        public Participant(IJoinCommandMediator mediator, IMessageWriter messageWriter)
         {
             this.messageWriter = messageWriter;
+            this.mediator = mediator;
         }
 
         public void Join(IChatRoom chatRoom)
         {
-            chatRoom.Add(this);
+            mediator.Send(new JoinChatRoom.Command(this, chatRoom));
         }
 
         public void Leave(IChatRoom chatRoom)
