@@ -96,9 +96,9 @@ namespace CQRS.Tests.CommandHandlerTests
                 sut.Handle(command);
 
                 // assert
-                participant1Mock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message));
-                participant2Mock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message));
-                senderMock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message));
+                participant1Mock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message), Times.Once());
+                participant2Mock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message), Times.Once());
+                senderMock.Verify(p => p.NewMessageReceivedFrom(chatRoomMock.Object, message), Times.Once());
             }
         }
     }
