@@ -11,7 +11,7 @@ namespace CQRS.Tests.QueryMediatorTests
         public class Send_ListParticipantsQuery : QueryMediatorTest
         {
             [Fact]
-            public void ShouldSendSpecifiedQueryToSpecifiedHandler()
+            public void ShouldSendSpecifiedQueryToRegisteredHandler()
             {
                 // arrange
                 var chatRoomMock = new Mock<IChatRoom>();
