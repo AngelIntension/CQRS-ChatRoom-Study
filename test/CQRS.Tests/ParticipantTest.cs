@@ -21,6 +21,7 @@ namespace CQRS.Tests.ParticipantTests
 
             queryMediator = new QueryMediator();
             queryMediator.Register(new ListParticipants.Handler());
+            queryMediator.Register(new ListMessages.Handler());
         }
 
         public class Join : ParticipantTest

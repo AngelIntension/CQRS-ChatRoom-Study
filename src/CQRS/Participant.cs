@@ -46,7 +46,7 @@ namespace CQRS
 
         public IEnumerable<ChatMessage> ListMessagesOf(IChatRoom chatRoom)
         {
-            return chatRoom.ListMessages();
+            return queryMediator.Send<ListMessages.Query, IEnumerable<ChatMessage>>(new ListMessages.Query(chatRoom));
         }
     }
 }
