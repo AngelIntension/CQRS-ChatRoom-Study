@@ -5,9 +5,9 @@ using Xunit;
 
 namespace CQRS.Tests
 {
-    public class JoinCommandMediatorTest
+    public class CommandMediatorTest
     {
-        public class Send : JoinCommandMediatorTest
+        public class Send_JoinChatRoomCommand : CommandMediatorTest
         {
             [Fact]
             public void ShouldSendSpecifiedCommandToAllRegisteredHandlers()
@@ -15,11 +15,11 @@ namespace CQRS.Tests
                 // arrange
                 var participantMock = new Mock<IParticipant>();
                 var chatRoomMock = new Mock<IChatRoom>();
-                var joinHandler1Mock = new Mock<IJoinHandler>();
-                var joinHandler2Mock = new Mock<IJoinHandler>();
-                var joinHandler3Mock = new Mock<IJoinHandler>();
+                var joinHandler1Mock = new Mock<ICommandHandler<JoinChatRoom.Command>>();
+                var joinHandler2Mock = new Mock<ICommandHandler<JoinChatRoom.Command>>();
+                var joinHandler3Mock = new Mock<ICommandHandler<JoinChatRoom.Command>>();
 
-                var sut = new JoinCommandMediator();
+                var sut = new CommandMediator();
                 sut.Register(commandHandler: joinHandler1Mock.Object);
                 sut.Register(commandHandler: joinHandler2Mock.Object);
                 sut.Register(commandHandler: joinHandler3Mock.Object);

@@ -8,11 +8,11 @@ namespace CQRS.Tests
 {
     public class ParticipantTest
     {
-        private readonly IJoinCommandMediator mediator;
+        private readonly ICommandMediator mediator;
 
         public ParticipantTest()
         {
-            mediator = new JoinCommandMediator();
+            mediator = new CommandMediator();
             mediator.Register(new JoinChatRoom.Handler());
         }
 

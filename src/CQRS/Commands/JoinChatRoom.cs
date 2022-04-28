@@ -4,7 +4,7 @@ namespace CQRS.Commands
 {
     public class JoinChatRoom
     {
-        public class Command
+        public class Command : ICommand
         {
             public Command(IParticipant requester, IChatRoom chatRoom)
             {
@@ -16,7 +16,7 @@ namespace CQRS.Commands
             public IChatRoom ChatRoom { get; }
         }
 
-        public class Handler : IJoinHandler
+        public class Handler : ICommandHandler<Command>
         {
             public void Handle(Command command)
             {

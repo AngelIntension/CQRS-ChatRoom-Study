@@ -7,17 +7,17 @@ namespace CQRS
     public class Participant : IParticipant
     {
         private IMessageWriter messageWriter;
-        private IJoinCommandMediator mediator;
+        private ICommandMediator commandMediator;
 
-        public Participant(IJoinCommandMediator mediator, IMessageWriter messageWriter)
+        public Participant(ICommandMediator commandMediator, IMessageWriter messageWriter)
         {
             this.messageWriter = messageWriter;
-            this.mediator = mediator;
+            this.commandMediator = commandMediator;
         }
 
         public void Join(IChatRoom chatRoom)
         {
-            mediator.Send(new JoinChatRoom.Command(this, chatRoom));
+            commandMediator.Send(new JoinChatRoom.Command(this, chatRoom));
         }
 
         public void Leave(IChatRoom chatRoom)
