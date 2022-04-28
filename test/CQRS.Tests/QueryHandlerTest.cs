@@ -38,5 +38,34 @@ namespace CQRS.Tests.QueryHandlerTests
                 Assert.Equal(participants, result);
             }
         }
+
+        public class ListMessages_Handler : QueryHandlerTest
+        {
+            [Fact]
+            public void ShouldReturnAllChatMessagesFromSpecifiedChatRoom()
+            {
+                // arrange
+                var senderMock = new Mock<IParticipant>();
+                var messages = new List<ChatMessage>()
+                {
+                    new ChatMessage(senderMock.Object, "test message"),
+                    new ChatMessage(senderMock.Object, "another test message"),
+                    new ChatMessage(senderMock.Object, "yet another test message")
+                };
+                var chatRoomMock = new Mock<IChatRoom>();
+                chatRoomMock.Setup(c => c.ListMessages()).Returns(messages);
+
+                var query = new ListMessages.Query(chatRoom: chatRoomMock.Object);
+
+                var sut = new ListMessages.Handler();
+
+                // act
+                var result = sut.Handle(query);
+
+                // assert
+                chatRoomMock.Verify(c => c.ListMessages(), Times.Once());
+                Assert.Equal(messages, result);
+            }
+        }
     }
 }
