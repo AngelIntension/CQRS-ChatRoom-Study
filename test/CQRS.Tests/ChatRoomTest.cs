@@ -3,7 +3,7 @@ using Moq;
 using System.Collections.Generic;
 using Xunit;
 
-namespace CQRS.Tests
+namespace CQRS.Tests.ChatRoomTests
 {
     public class ChatRoomTest
     {

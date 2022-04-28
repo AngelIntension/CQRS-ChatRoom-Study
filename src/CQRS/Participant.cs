@@ -27,7 +27,8 @@ namespace CQRS
 
         public void SendMessageTo(IChatRoom chatRoom, string message)
         {
-            chatRoom.Add(new ChatMessage(this, message));
+            var chatMessage = new ChatMessage(this, message);
+            commandMediator.Send(new SendChatMessage.Command(chatRoom, chatMessage));
         }
 
         public void NewMessageReceivedFrom(IChatRoom chatRoom, ChatMessage message)

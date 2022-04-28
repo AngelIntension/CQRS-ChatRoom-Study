@@ -3,7 +3,7 @@ using CQRS.Commands;
 using Moq;
 using Xunit;
 
-namespace CQRS.Tests
+namespace CQRS.Tests.CommandMediatorTests
 {
     public class CommandMediatorTest
     {

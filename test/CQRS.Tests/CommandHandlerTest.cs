@@ -3,11 +3,11 @@ using CQRS.Commands;
 using Moq;
 using Xunit;
 
-namespace CQRS.Tests
+namespace CQRS.Tests.CommandHandlerTests
 {
     public class CommandHandlerTest
     {
-        public class JoinChatRoom_Handle : CommandHandlerTest
+        public class JoinChatRoom_Handler : CommandHandlerTest
         {
             [Fact]
             public void ShouldAddSpecifiedRequesterToSpecifiedChatRoom()
@@ -27,7 +27,7 @@ namespace CQRS.Tests
             }
         }
 
-        public class LeaveChatRoom_Handle : CommandHandlerTest
+        public class LeaveChatRoom_Handler : CommandHandlerTest
         {
             [Fact]
             public void ShouldRemoveSpecifiedRequesterFromSpecifiedChatRoom()
@@ -43,7 +43,29 @@ namespace CQRS.Tests
                 sut.Handle(command);
 
                 // assert
-                chatRoomMock.Verify(c => c.Remove(requesterMock.Object));
+                chatRoomMock.Verify(c => c.Remove(requesterMock.Object), Times.Once());
+            }
+        }
+
+        public class SendChatMessage_Handler : CommandHandlerTest
+        {
+            [Fact]
+            public void ShouldSendSpecifiedMessageToSpecifiedChatRoom()
+            {
+                // arrange
+                var chatRoomMock = new Mock<IChatRoom>();
+                var senderMock = new Mock<IParticipant>();
+
+                var message = new ChatMessage(senderMock.Object, "test message");
+                var command = new SendChatMessage.Command(chatRoom: chatRoomMock.Object, message: message);
+
+                var sut = new SendChatMessage.Handler();
+
+                // act
+                sut.Handle(command);
+
+                // assert
+                chatRoomMock.Verify(c => c.Add(message), Times.Once());
             }
         }
     }

@@ -4,7 +4,7 @@ using Moq;
 using System.Collections.Generic;
 using Xunit;
 
-namespace CQRS.Tests
+namespace CQRS.Tests.ParticipantTests
 {
     public class ParticipantTest
     {
@@ -15,6 +15,7 @@ namespace CQRS.Tests
             mediator = new CommandMediator();
             mediator.Register(new JoinChatRoom.Handler());
             mediator.Register(new LeaveChatRoom.Handler());
+            mediator.Register(new SendChatMessage.Handler());
         }
 
         public class Join : ParticipantTest
