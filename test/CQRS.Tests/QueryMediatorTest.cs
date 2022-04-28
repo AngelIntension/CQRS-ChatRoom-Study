@@ -14,7 +14,8 @@ namespace CQRS.Tests.QueryMediatorTests
             public void ShouldSendSpecifiedQueryToSpecifiedHandler()
             {
                 // arrange
-                var query = new ListParticipants.Query();
+                var chatRoomMock = new Mock<IChatRoom>();
+                var query = new ListParticipants.Query(chatRoomMock.Object);
 
                 var participant1Mock = new Mock<IParticipant>();
                 var participant2Mock = new Mock<IParticipant>();
