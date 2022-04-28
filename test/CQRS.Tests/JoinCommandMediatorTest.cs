@@ -24,15 +24,15 @@ namespace CQRS.Tests
                 sut.Register(commandHandler: joinHandler2Mock.Object);
                 sut.Register(commandHandler: joinHandler3Mock.Object);
 
-                var command = new Join.Command(sender: participantMock.Object, chatRoom: chatRoomMock.Object);
+                var command = new JoinChatRoom.Command(requester: participantMock.Object, chatRoom: chatRoomMock.Object);
 
                 // act
                 sut.Send(command: command);
 
                 // assert
-                joinHandler1Mock.Verify(h => h.Handle(command));
-                joinHandler2Mock.Verify(h => h.Handle(command));
-                joinHandler3Mock.Verify(h => h.Handle(command));
+                joinHandler1Mock.Verify(h => h.Handle(command), Times.Once());
+                joinHandler2Mock.Verify(h => h.Handle(command), Times.Once());
+                joinHandler3Mock.Verify(h => h.Handle(command), Times.Once());
             }
         }
     }

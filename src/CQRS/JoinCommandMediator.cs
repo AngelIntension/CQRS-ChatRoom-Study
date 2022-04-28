@@ -13,7 +13,7 @@ namespace CQRS
             handlers.Add(commandHandler);
         }
 
-        public void Send(Join.Command command)
+        public void Send(JoinChatRoom.Command command)
         {
             handlers.ForEach(handler => handler.Handle(command));
         }

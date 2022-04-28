@@ -4,6 +4,6 @@ namespace CQRS.Abstractions
 {
     public interface IJoinHandler
     {
-        void Handle(Join.Command command);
+        void Handle(JoinChatRoom.Command command);
     }
 }
