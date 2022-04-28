@@ -1,18 +1,21 @@
 ﻿using CQRS.Abstractions;
 using CQRS.Commands;
+using CQRS.Queries;
 using System.Collections.Generic;
 
 namespace CQRS
 {
     public class Participant : IParticipant
     {
-        private IMessageWriter messageWriter;
-        private ICommandMediator commandMediator;
+        private readonly IMessageWriter messageWriter;
+        private readonly ICommandMediator commandMediator;
+        private readonly IQueryMediator queryMediator;
 
-        public Participant(ICommandMediator commandMediator, IMessageWriter messageWriter)
+        public Participant(ICommandMediator commandMediator, IQueryMediator queryMediator, IMessageWriter messageWriter)
         {
             this.messageWriter = messageWriter;
             this.commandMediator = commandMediator;
+            this.queryMediator = queryMediator;
         }
 
         public void Join(IChatRoom chatRoom)
@@ -38,7 +41,7 @@ namespace CQRS
 
         public IEnumerable<IParticipant> ListParticipantsOf(IChatRoom chatRoom)
         {
-            return chatRoom.ListParticipants();
+            return queryMediator.Send<ListParticipants.Query, IEnumerable<IParticipant>>(new ListParticipants.Query(chatRoom));
         }
 
         public IEnumerable<ChatMessage> ListMessagesOf(IChatRoom chatRoom)

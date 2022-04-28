@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CQRS
 {
-    public class QueryMediator
+    public class QueryMediator : IQueryMediator
     {
         private readonly Dictionary<Type, object> handlers = new Dictionary<Type, object>();
 
